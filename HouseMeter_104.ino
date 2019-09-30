@@ -1,5 +1,5 @@
 /************************************************************************
-* PROGRAM :        HouseMeter_103.c             
+* PROGRAM :        HouseMeter_104.c             
 * 
 * DESCRIPTION :
 *       Monitor de consumo de energia
@@ -91,10 +91,10 @@ timeClient.begin();
 ************************************************************************/ 
     WiFi.mode(WIFI_STA);
     thing.add_wifi(WiFi_ssid, WiFi_password);
-      while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-      Serial.println("Connection Failed! Rebooting...");
-      delay(3000);
-      ESP.restart();}
+      //while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+      //Serial.println("Connection Failed! Rebooting...");
+      //delay(3000);
+      //ESP.restart();}
 
 /************************************************************************
 * OTA Functions - do not remove
@@ -149,9 +149,10 @@ void loop() {
 /************************************************************************
 * OTA & Thinger handles - do not remove
 ************************************************************************/ 
-  ArduinoOTA.handle();
-  thing.handle();
-
+  if (WiFi.waitForConnectResult() == WL_CONNECTED){
+    ArduinoOTA.handle();
+    thing.handle();
+  }
 /************************************************************************
 * Serial debug
 ************************************************************************/ 
@@ -168,7 +169,7 @@ void loop() {
     // Extract time
     timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
 
-    battVoltage = ESP.getVcc()/1000;
+    battVoltage = ESP.getVcc();
     RSSIread = WiFi.RSSI();
 
       msgbox = "\n---------------------------------";
